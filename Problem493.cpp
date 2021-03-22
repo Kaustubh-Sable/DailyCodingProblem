@@ -19,8 +19,11 @@ int binarySearch(vector<int> &probs, int rand_num);
 
 int main() {
   vector<int> nums {1, 2, 3, 4};
+  // vector<int> nums {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
   vector<int> probs {10, 50, 20, 20};   // probs in unit of out of 100.
-  
+  // vector<int> probs {0, 50, 0, 50};
+  // vector<int> probs {10,30,10,0,0,0,20,0,0,0,30};
+
   srand(time(NULL));        // https://www.learncpp.com/cpp-tutorial/random-number-generation/ 
   rand();
 
@@ -47,20 +50,23 @@ int getRandomNumber(vector<int> &nums, vector<int> &probs) {
 
 int binarySearch(vector<int> &numbers, int target) {
   int l = 0, r = numbers.size()-1;
-  // 10 60  80  100   // 70
+
+  if(target==0) {
+    while(numbers[l]==0)
+      l++;
+    return l;
+  }
   
-  while(l<=r) {
+  while(l<=r && r>0) {
     int mid = (l+r)/2;
-    if(target<=numbers[l])
-      return l;
-    if(r>0 && target>numbers[r-1])
-      return r;
-    if(target==numbers[mid])
+    if(mid>0 && target>numbers[mid-1] && target<=numbers[mid])
       return mid;
-    if(target>numbers[mid])
-      l = mid;
-    else if(target<numbers[mid])
+    if(target>numbers[mid] && mid<numbers.size()-1 && target<=numbers[mid+1])
+      return mid+1;
+    if(target<=numbers[mid])
       r = mid;
+    else if(target>numbers[mid])
+      l = mid+1;
   }
 
   return l;
